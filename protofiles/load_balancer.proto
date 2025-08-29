@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+service LoadBalancerService {
+    rpc GetServerPortForRider (RiderRequest) returns (ServerListResponse);
+    rpc GetServerPortForDriver (DriverRequest) returns (DriverPortResponse);
+    rpc DriverExit (DriverExitRequest) returns (DriverExitResponse);  
+}
+
+message RiderRequest {
+    string rider_id = 1;
+}
+
+message DriverRequest {
+    string driver_id = 1;
+}
+
+message ServerListResponse {
+    repeated string server_ports = 1;  // List of server ports returned to rider
+}
+
+message DriverPortResponse {
+    string server_port = 1;  // Single server port returned to driver
+}
+
+message DriverExitRequest {
+    string driver_id = 1;
+    string port = 2;
+}
+
+message DriverExitResponse {  // Add response message for DriverExit
+    string status = 1;  // Status message for driver exit
+}

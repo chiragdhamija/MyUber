@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package ride_sharing;
+
+// The ride-sharing service definition
+service RideSharingService {
+    rpc RequestRide(RideRequest) returns (RideResponse);
+    rpc GetRideStatus(RideStatusRequest) returns (RideStatusResponse);
+    rpc AcceptRide(AcceptRideRequest) returns (AcceptRideResponse);
+    rpc RejectRide(RejectRideRequest) returns (RejectRideResponse);
+    rpc CompleteRide(RideCompletionRequest) returns (RideCompletionResponse);
+    rpc GetAssignedRide(AssignedRideRequest) returns (AssignedRideDetails);
+    rpc RegisterDriver(RegisterDriverRequest) returns (AcceptRideResponse);
+    rpc AssignRide(AssignRideRequest) returns (AssignRideResponse);
+    rpc UnregisterDriver(UnregisterDriverRequest) returns (UnregisterDriverResponse);
+}
+
+// Message types
+
+message UnregisterDriverRequest {
+    string driver_id = 1;
+}
+
+message UnregisterDriverResponse {
+    string status = 1;
+}
+
+
+message RegisterDriverRequest {
+    string driver_id = 1; // ID of the driver to be registered
+}
+
+message RideRequest {
+    string rider_id = 1;
+    string pickup_location = 2;
+    string destination = 3;
+}
+
+message RideResponse {
+    string status = 1; // "assigned", "no_drivers_available"
+    string ride_id = 2; // The assigned ride ID
+    string assigned_driver = 3; // Driver ID if assigned
+}
+
+message RideStatusRequest {
+    string ride_id = 1;
+}
+
+message RideStatusResponse {
+    string status = 1; // "waiting_for_acceptance", "in_progress", "completed", "cancelled", "rejected"
+}
+
+message AcceptRideRequest {
+    string driver_id = 1;
+    string ride_id = 2;
+}
+
+message AcceptRideResponse {
+    string status = 1; // Registration status
+    string ride_id = 2; // ID of the assigned ride (if any)
+}
+
+message RejectRideRequest {
+    string driver_id = 1;
+    string ride_id = 2;
+}
+
+message RejectRideResponse {
+    string status = 1; // "ride_rejected", "no_such_ride"
+}
+
+message RideCompletionRequest {
+    string driver_id = 1;
+    string ride_id = 2;
+}
+
+message RideCompletionResponse {
+    string status = 1; // "ride_completed", "ride_not_found"
+}
+
+message AssignedRideRequest {
+    string driver_id = 1;
+}
+
+message AssignedRideDetails {
+    string pickup_location = 1;
+    string destination = 2;
+    string ride_id = 3; // Added ride_id to provide future reference
+}
+
+message AssignRideRequest {
+    string driver_id = 1; // Driver ID requesting a ride assignment
+}
+
+message AssignRideResponse {
+    string ride_id = 1; // ID of the assigned ride
+}
